@@ -6,6 +6,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -99,7 +100,30 @@ public class Controller implements Initializable {
                 }
             } else {
                 textArea.appendText(msg + "\n");
+                try {
+                    SaveHistory();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
+    }
+
+    private void SaveHistory() throws IOException {              //Сохраняем в файл history.txt
+        try {
+            File history = new File("history.txt");
+            if (!history.exists()) {
+                System.out.println("Файла истории нет,создадим его");
+                history.createNewFile();
+            }
+            PrintWriter fileWriter = new PrintWriter(new FileWriter(history, true));
+
+            BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+            bufferedWriter.write(textArea.getText());
+            bufferedWriter.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
